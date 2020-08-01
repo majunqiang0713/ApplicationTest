@@ -1,7 +1,5 @@
 package com.example.applicationtest;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,8 +9,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -22,6 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     InputStream is = conn.getInputStream();
                     // 把is的内容转换为字符串
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[8192];
                     int len = -1;
                     while ((len = is.read(buffer)) != -1) {
                         bos.write(buffer, 0, len);
@@ -207,7 +212,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * AysyncHttpClient 发送GEt请求
+     */
+    public void asyncHttpClientGet() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("https://www.google.com", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
 
 
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
+
+    /**
+     * AysyncHttpClient 发送POSt请求
+     */
+    public void asyncHttpClientPost() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("usename", "name");
+        requestParams.put("pwd", "pwd");
+        client.post("https://www.google.com", requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
 
 }
